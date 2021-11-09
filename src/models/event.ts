@@ -1,4 +1,4 @@
-import { model, Schema, Model } from 'mongoose';
+import { models, model, Schema } from 'mongoose';
 import { EventInterface } from 'src/types/event';
 
 const EventSchema: Schema = new Schema<EventInterface>({
@@ -12,6 +12,4 @@ const EventSchema: Schema = new Schema<EventInterface>({
     state: { type: String, required: true },
 });
 
-const EventModel: Model<EventInterface> = model('Event', EventSchema);
-
-export default EventModel;
+export default models.Event || model('Event', EventSchema);

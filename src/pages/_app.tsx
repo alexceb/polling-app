@@ -1,8 +1,13 @@
-import '../styles/globals.css';
+import '../styles/globals.scss';
 import type { AppProps } from 'next/app';
+import EventsContextProvider from 'src/hooks/use-events';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+  	return (
+		<EventsContextProvider>
+			<Component {...pageProps} />
+		</EventsContextProvider>
+	)
 }
 
 export default MyApp

@@ -1,0 +1,94 @@
+$colors: (
+    transparent: transparent,
+    black: #000000,
+    gray-light: #cccccc,
+    gray-manatee: #9295a7,
+    gray-soft: #949596,
+    gray: #4c4c4b,
+    gray-dark: #1f1f1f,
+    white: #ffffff,
+    blue-light: #f7f9ff,
+    blue-soft: #e7eaf5,
+    blue-pale: #9295a7,
+    blue-washed: #5492d6,
+    blue-primary: #0071eb,
+    blue-middle: #0056b3,
+    blue-deep: #003e80,
+    green-soft: #c7e4d2,
+    green-light: #2ac768,
+    green-middle: #22aa58,
+    green-dark: #1b8847,
+    red-light: #f8eeed,
+    red: #bd5751,
+    orange-light: #fdf5e7,
+    orange: #f39c12,
+);
+
+$spacing: (
+    auto: auto,
+    none: 0px,
+    base: 4px,
+    xs: 8px,
+    small: 12px,
+    medium: 16px,
+    large: 20px,
+    xl: 24px,
+    2xl: 32px,
+    3xl: 40px,
+    4xl: 42px,
+    5xl: 48px,
+    6xl: 60px,
+    7xl: 64px,
+    8xl: 72px,
+    26xl: 104px,
+    30xl: 120px,
+);
+
+$font-sizes: (
+    xxs: 12px,
+    xs: 16px,
+    small: 20px,
+    medium: 24px,
+    large: 28px,
+    xl: 48px,
+);
+
+$letter-spacings: (
+    xxs: 0.24px,
+    xs: 0.16px,
+    small: normal,
+    medium: -0.48px,
+    large: -0.8px,
+    xl: -1.6px,
+);
+
+$breakpoints: (
+    tablet: 768px,
+    desktop: 1025px,
+    mobile: 480px,
+    upper-mobile: 767px,
+);
+
+@mixin tablet {
+    @media (min-width: map-get($breakpoints, tablet)) {
+        @content;
+    }
+}
+
+@mixin desktop {
+    @media (min-width: map-get($breakpoints, desktop)) {
+        @content;
+    }
+}
+
+@mixin upper-mobile {
+    @media (max-width: map-get($breakpoints, upper-mobile)) {
+        @content;
+    }
+}
+
+@mixin mobile {
+    @media (max-width: map-get($breakpoints, mobile)) {
+        @content;
+    }
+}
