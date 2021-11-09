@@ -1,22 +1,8 @@
-import { model, Schema, Model, Document } from 'mongoose';
-
-type EventState = 'STARTED' | 'NOT_STARTED' | 'FINISHED';
-
-interface EventInterface extends Document {
-    objectId: number;
-    group: string;
-    name: string;
-    homeName: string;
-    awayName: string;
-    sport: string;
-    country: string;
-    state: EventState;
-    createdAt?: string;
-}
+import { model, Schema, Model } from 'mongoose';
+import { EventInterface } from 'src/types/event';
 
 const EventSchema: Schema = new Schema<EventInterface>({
-    // id: { type: Number, required: true },
-    objectId: { type: Number, required: true },
+    objectId: { type: String, required: true },
     group: { type: String, required: true },
     name: { type: String, required: true },
     homeName: { type: String, required: true },
@@ -24,7 +10,6 @@ const EventSchema: Schema = new Schema<EventInterface>({
     sport: { type: String, required: true },
     country: { type: String, required: true },
     state: { type: String, required: true },
-    createdAt: String,
 });
 
 const EventModel: Model<EventInterface> = model('Event', EventSchema);
