@@ -5,6 +5,10 @@ WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install --frozen-lockfile
 
+ARG ARG_MONGO_DB_URI=""
+
+ENV MONGO_DB_URI=$ARG_MONGO_DB_URI
+
 FROM node:alpine AS builder
 WORKDIR /app
 COPY . .
