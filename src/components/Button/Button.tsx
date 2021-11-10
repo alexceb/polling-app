@@ -1,7 +1,5 @@
 import { AllHTMLAttributes } from 'react';
 import { classNames } from 'src/utils/css';
-
-// @ts-ignore
 import styles from './Button.module.scss';
 
 interface ButtonProps extends Omit<AllHTMLAttributes<HTMLElement>, 'size' | 'color'> {
@@ -25,6 +23,7 @@ function Button(props: ButtonProps) {
 
     const buttonClassName = classNames(
         styles.button,
+        // @ts-ignore
         primary && styles.primary,
         outline && styles.outline,
         size && styles[size],

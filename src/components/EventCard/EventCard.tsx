@@ -1,28 +1,49 @@
+import { Fragment } from 'react';
 import { useEvents } from 'src/hooks/use-events';
-import { Winner } from 'src/types';
+import { Vote, Winner } from 'src/types';
+import { postVote } from 'src/actions/api';
 import Button from '../Button/Button';
 import styles from './EventCard.module.scss';
 
 function EventCard() {
     const { state, dispatch } = useEvents();
     const { activeEvent } = state;
-    const vote = (winnerType: Winner) => {
-        dispatch({ type: 'VOTE_FOR_EVENT', data: winnerType })
+
+    async function postUserVote(voteObj: Vote) {
+        try {
+            const response = await postVote(voteObj);
+            dispatch({ type: 'VOTE_FOR_EVENT', data: response.data });
+        } catch (error) {
+            dispatch({ type: 'FETCH_ERROR', error });
+        }
+    }
+
+    function VoteForWinner(winnerType: Winner) {
+        const voteData = {
+            eventId: activeEvent!.objectId,
+            winner: winnerType,
+        }
+        postUserVote(voteData);
     }
 
     return (
-        <div className={styles.eventCardWrapper}>
-            <div className={styles.eventDescription}>
-                <div className={styles.participant}>{activeEvent?.homeName}</div>
-                <div className={styles.divider}>VS</div>
-                <div className={styles.participant}>{activeEvent?.awayName}</div>
+        <Fragment>
+            <h1 className={styles.title}>
+                {`Vote who's going to win!`}
+            </h1>
+            <div className={styles.eventCardWrapper}>
+                <div className={styles.eventDescription}>
+                    <div className={styles.participant}>{activeEvent?.homeName}</div>
+                    <div className={styles.divider}>VS</div>
+                    <div className={styles.participant}>{activeEvent?.awayName}</div>
+                </div>
+                <div className={styles.buttons}>
+                    <Button primary size="small" onClick={() => VoteForWinner('home')}>Home</Button>
+                    <Button outline size="small" onClick={() => VoteForWinner('draw')}>Draw</Button>
+                    <Button primary size="small" onClick={() => VoteForWinner('guest')}>Guest</Button>
+                </div>
             </div>
-            <div className={styles.buttons}>
-                <Button primary size="small" onClick={() => vote('home')}>Home</Button>
-                <Button outline size="small" onClick={() => vote('draw')}>Draw</Button>
-                <Button primary size="small" onClick={() => vote('guest')}>Guest</Button>
-            </div>
-        </div>
+        </Fragment>
     );
 }
 

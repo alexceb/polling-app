@@ -1,11 +1,12 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import type { NextPage } from 'next';
+import Head from 'next/head';
 
-import { Loader } from 'src/components/Loader/Loader'
-import { useEvents } from 'src/hooks/use-events'
-import EventCard from 'src/components/EventCard/EventCard'
+import { Loader } from 'src/components/Loader/Loader';
+import { useEvents } from 'src/hooks/use-events';
+import EventCard from 'src/components/EventCard/EventCard';
+import NoEventsMessage from 'src/components/NoEventsMessage/NoEventsMessage';
 
-import styles from 'src/styles/Home.module.scss'
+import styles from 'src/styles/Home.module.scss';
 
 const Home: NextPage = () => {
     const { state } = useEvents();
@@ -20,11 +21,11 @@ const Home: NextPage = () => {
 
             {state.allEvents? (
                 <main className={styles.main}>
-                    <h1 className={styles.title}>
-                        {`Vote who's going to win!`}
-                    </h1>
-
-                    <EventCard />
+                    {state.activeEvent? (
+                        <EventCard />
+                    ) : (
+                        <NoEventsMessage />
+                    )}
                 </main>
             ) : (
                 <Loader />
