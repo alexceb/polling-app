@@ -1,20 +1,35 @@
-FROM node:14 as builder
+FROM node:alpine AS deps
 
-# Create app directory
-WORKDIR /app/polling
+RUN apk add --no-cache libc6-compat
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install --frozen-lockfile
 
-# Installing dependencies
+FROM node:alpine AS builder
+WORKDIR /app
 COPY . .
+COPY --from=deps /app/node_modules ./node_modules
+RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
-RUN yarn install
-RUN yarn build
+# Production image, copy all the files and run next
+FROM node:alpine AS runner
+WORKDIR /app
 
-COPY --from=builder /app/polling/node_modules node_modules
-COPY --from=builder /app/polling/.next .next
-COPY --from=builder /app/polling/public public
-COPY --from=builder /app/polling/next.config.js next.config.js
+ENV NODE_ENV production
 
-WORKDIR /app/polling
+RUN addgroup -g 1001 -S nodejs
+RUN adduser -S nextjs -u 1001
 
-EXPOSE 8080
-CMD [ "node" ]
+COPY --from=builder /app/public ./public
+COPY --from=builder --chown=nextjs:nodejs /app/.next ./.next
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/next.config.js next.config.js
+
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+
+CMD ["node_modules/.bin/next", "start"]
